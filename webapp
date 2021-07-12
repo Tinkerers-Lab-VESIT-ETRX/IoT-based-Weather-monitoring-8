@@ -1,0 +1,341 @@
+<html>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  <head>
+<style> 
+body {
+background-color: ivory;
+}
+div {
+  background-color: snow;
+  width: 800px;
+  border: 15px solid rgba(95, 197, 228, 0.979);
+  padding: 50px;
+  margin: 20px;
+}
+h1 {
+  text-align: center;
+}
+</style>
+</head>
+    <body>
+      <h1 style="color: rgb(51, 141, 177);">Sensor Data Plotting</h1>
+      <div>
+      <h3 style="color: steelblue;">Humidity Data</h3>
+      <label>Please select the date:</label>
+      <input type="date" id="myDate">
+<button onclick="myFunction()">Plot data</button>
+<p id="demo"></p>
+      <canvas id="humidchart25" style="width:100%;max-width:600px"></canvas>
+    </div>
+    <div>
+      <h3 style="color: steelblue;">Temperature Data</h3>
+      <label>Please select the date:</label>
+      <input type="date" id="myDate1">
+<button onclick="myFunction1()">Plot data</button>
+<p id="demo1"></p>
+        <canvas id="tempchart25" style="width:100%;max-width:600px"></canvas>
+      </div>
+      <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+ 
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+  function myFunction() {
+    var x = document.getElementById("myDate").value;
+    if (x=='2021-06-25'){
+  var Http = new XMLHttpRequest();
+ var url = 'https://iot-bwms-5cfb1-default-rtdb.firebaseio.com/Humidity_data.json';
+ Http.onload = function() {
+  const myObj = JSON.parse(Http.responseText)
+  console.log(myObj)
+var hdates = [];
+for (let index = 0; index<myObj.length; index++) {
+    hdates.push(myObj[index].date)
+    }
+    let hdates25= hdates.filter(x => x.includes("25"));
+console.log(hdates25);
+  var xValues = [];
+  for (let index = 0; index<hdates25.length; index++) {
+    xValues.push(myObj[index].time)
+    }
+    var yValues = [];
+for (let index = 0; index < hdates25.length; index++) {
+    yValues.push(myObj[index].reading)
+    }
+new Chart("humidchart25", {
+  type: "line",
+  data: {
+    labels: xValues,
+    datasets: [{
+      fill: false,
+      lineTension: 0,
+      backgroundColor: "rgba(0,0,400,1.0)",
+      borderColor: "rgba(0,0,200,0.5)",
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {
+            display: false
+         },
+    layout: {
+            padding: 20
+        },
+            scales: {
+              xAxes: [{ 
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Time'
+                }
+              }],
+              yAxes: [{
+            ticks: {
+                min: 40, max:90
+            },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Humidity'
+                }
+              }],
+            }
+          },
+});
+
+    
+    }
+  
+
+ Http.open("GET", url);
+Http.send();
+document.getElementById("demo").innerHTML = ''
+  }
+  else if (x=='2021-06-26'){
+    var Http = new XMLHttpRequest();
+ var url = 'https://iot-bwms-5cfb1-default-rtdb.firebaseio.com/Humidity_data.json';
+ Http.onload = function() {
+  const myObj = JSON.parse(Http.responseText)
+  console.log(myObj)
+var hdates = [];
+for (let index = 0; index<myObj.length; index++) {
+    hdates.push(myObj[index].date)
+    }
+    let hdates25= hdates.filter(x => x.includes("25"));
+console.log(hdates25);
+  var xValues = [];
+  for (let index = hdates25.length; index<myObj.length; index++) {
+    xValues.push(myObj[index].time)
+    }
+    var yValues = [];
+for (let index = hdates25.length; index < myObj.length; index++) {
+    yValues.push(myObj[index].reading)
+    }
+new Chart("humidchart25", {
+  type: "line",
+  data: {
+    labels: xValues,
+    datasets: [{
+      fill: false,
+      lineTension: 0,
+      backgroundColor: "rgba(0,0,400,1.0)",
+      borderColor: "rgba(0,0,200,0.5)",
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {
+            display: false
+         },
+    layout: {
+            padding: 20
+        },
+            scales: {
+              xAxes: [{ 
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Time'
+                }
+              }],
+              yAxes: [{
+            ticks: {
+                min: 40, max:90
+            },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Humidity'
+                }
+              }],
+            }
+          },
+});
+
+    
+    }
+  
+
+ Http.open("GET", url);
+Http.send();
+document.getElementById("demo").innerHTML = ''
+  }
+  else {
+    new Chart("humidchart25")
+    document.getElementById("demo").innerHTML = 'No Information Available. Please check another date.'
+  }
+}
+  function myFunction1() {
+    var x = document.getElementById("myDate1").value;
+    if (x=='2021-06-25'){
+  var Http1 = new XMLHttpRequest();
+ var url = 'https://iot-bwms-5cfb1-default-rtdb.firebaseio.com/Temperature_data.json';
+ Http1.onload = function() {
+  const myObj1 = JSON.parse(Http1.responseText)
+  console.log(myObj1)
+var tdates = [];
+for (let index = 0; index<myObj1.length; index++) {
+    tdates.push(myObj1[index].date)
+    }
+    let tdates25= tdates.filter(x => x.includes("25"));
+console.log(tdates25);
+  var txValues = [];
+  for (let index = 0; index<tdates25.length; index++) {
+    txValues.push(myObj1[index].time)
+    }
+    var tyValues = [];
+for (let index = 0; index < tdates25.length; index++) {
+    tyValues.push(myObj1[index].reading)
+    }
+new Chart("tempchart25", {
+  type: "line",
+  data: {
+    labels: txValues,
+    datasets: [{
+      fill: false,
+      lineTension: 0,
+      backgroundColor: "rgba(0,0,400,1.0)",
+      borderColor: "rgba(0,0,200,0.5)",
+      data: tyValues
+    }]
+  },
+  options: {
+    legend: {
+            display: false
+         },
+    layout: {
+            padding: 20
+        },
+            scales: {
+              xAxes: [{ 
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Time'
+                }
+              }],
+              yAxes: [{
+            ticks: {
+                min: 0, max: 50
+            },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Temperature in C'
+                }
+              }],
+            }
+          },
+});
+
+    
+    }
+    
+  
+
+ Http1.open("GET", url);
+Http1.send();
+document.getElementById("demo1").innerHTML = ''
+  }
+  else if(x=='2021-06-26'){var Http1 = new XMLHttpRequest();
+ var url = 'https://iot-bwms-5cfb1-default-rtdb.firebaseio.com/Temperature_data.json';
+ Http1.onload = function() {
+  const myObj1 = JSON.parse(Http1.responseText)
+  console.log(myObj1)
+var tdates = [];
+for (let index = 0; index<myObj1.length; index++) {
+    tdates.push(myObj1[index].date)
+    }
+    let tdates25= tdates.filter(x => x.includes("25"));
+console.log(tdates25);
+  var txValues = [];
+  for (let index = tdates25.length; index<myObj1.length; index++) {
+    txValues.push(myObj1[index].time)
+    }
+    var tyValues = [];
+for (let index = tdates25.length; index < myObj1.length; index++) {
+    tyValues.push(myObj1[index].reading)
+    }
+new Chart("tempchart25", {
+  type: "line",
+  data: {
+    labels: txValues,
+    datasets: [{
+      fill: false,
+      lineTension: 0,
+      backgroundColor: "rgba(0,0,400,1.0)",
+      borderColor: "rgba(0,0,200,0.5)",
+      data: tyValues
+    }]
+  },
+  options: {
+    legend: {
+            display: false
+         },
+    layout: {
+            padding: 20
+        },
+            scales: {
+              xAxes: [{ 
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Time'
+                }
+              }],
+              yAxes: [{
+            ticks: {
+                min: 0, max: 50
+            },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Temperature in C'
+                }
+              }],
+            }
+          },
+});
+
+    
+    }
+    
+  
+
+ Http1.open("GET", url);
+Http1.send();
+document.getElementById("demo1").innerHTML = ''
+
+  }
+  else{
+    new Chart("tempchart25")
+    document.getElementById("demo1").innerHTML = 'No Information Available. Please check another date.'
+  }
+}
+
+
+</script>
+</body>
+</html>
